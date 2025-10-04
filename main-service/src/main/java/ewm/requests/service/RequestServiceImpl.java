@@ -14,10 +14,10 @@ import ewm.requests.dto.RequestDto;
 import ewm.requests.enums.RequestStatus;
 import ewm.user.User;
 import ewm.user.service.UserService;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import jakarta.validation.ValidationException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

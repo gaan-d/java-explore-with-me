@@ -1,7 +1,6 @@
 package ewm.events.dto;
 
 import ewm.categories.dto.CategoryDto;
-import ewm.user.dto.UserDto;
 import ewm.user.dto.UserShortDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

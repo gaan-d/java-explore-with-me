@@ -24,7 +24,6 @@ import ewm.requests.dto.ConfirmedRequestsDto;
 import ewm.user.User;
 import ewm.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

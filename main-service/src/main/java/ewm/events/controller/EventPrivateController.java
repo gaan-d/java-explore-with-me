@@ -1,6 +1,9 @@
 package ewm.events.controller;
 
-import ewm.events.dto.*;
+import ewm.events.dto.EventCreateDto;
+import ewm.events.dto.EventDto;
+import ewm.events.dto.EventShortDto;
+import ewm.events.dto.EventUserUpdateDto;
 import ewm.events.service.EventService;
 import ewm.requests.dto.EventRequestStatusUpdateRequest;
 import ewm.requests.dto.EventRequestStatusUpdateResult;
