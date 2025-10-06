@@ -27,8 +27,8 @@ public class CategoryPublicController {
     }
 
     @GetMapping("/{catId}")
-    public CategoryDto getCategoryById(@PathVariable Long catid) {
-        log.info("Getting category with catId: {}", catid);
-        return service.getById(catid);
+    public CategoryDto getCategoryById(@PathVariable Long catId) {
+        log.info("Getting category with catId: {}", catId);
+        return service.getById(catId);
     }
 }

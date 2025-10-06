@@ -19,5 +19,5 @@ public class RequestDto {
 
     private Long requester;
 
-    private RequestStatus requestStatus;
+    private RequestStatus status;
 }

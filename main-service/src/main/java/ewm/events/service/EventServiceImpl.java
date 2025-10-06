@@ -33,13 +33,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static ewm.events.enums.AdminAction.PUBLISH_EVENT;
@@ -85,7 +83,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDto updateEventByOwner(Long userId, Long eventId, EventUserUpdateDto dto) {
-        Event event = checkAndReturnEvent(eventId);
+        Event event = checkEventExistence(eventId);
         if (event.getInitiator().getId() != userId) {
             throw new BadRequestException("Событие не должно быть опубликовано");
         }
@@ -138,7 +136,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDto updateEventByAdmin(Long eventId, EventAdminUpdateDto dto) {
-        Event event = checkAndReturnEvent(eventId);
+        Event event =checkEventExistence(eventId);
 
         if (dto.getStateAction() != null) {
             AdminAction stateAction = AdminAction.valueOf(dto.getStateAction());
@@ -209,7 +207,7 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional(readOnly = true)
     public EventDto getEventByOwner(Long userId, Long eventId) {
-        Event event = checkAndReturnEvent(eventId);
+        Event event = checkEventExistence(eventId);
         if (event.getInitiator().getId() == userId) {
             return eventMapper.mapEventToEventDto(event, requestRepository.countByEventIdAndStatus(eventId, CONFIRMED));
         } else {
@@ -356,9 +354,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public EventViewsDto getEventById(Long eventId, HttpServletRequest request) {
-        Event event = checkAndReturnEvent(eventId);
+        Event event = checkEventExistence(eventId);
         if (event.getState() != PUBLISHED) {
             throw new NotFoundException("Event is not PUBLISHED");
         }
@@ -375,7 +373,7 @@ public class EventServiceImpl implements EventService {
             result = eventMapper.mapEventToEventDtoWithViews(event, statsDto.getFirst().getHits(),
                     requestRepository.countByEventIdAndStatus(eventId, CONFIRMED));
         } else {
-            result = eventMapper.mapEventToEventDtoWithViews(event, 0L,
+            result = eventMapper.mapEventToEventDtoWithViews(event, 1L,
                     requestRepository.countByEventIdAndStatus(eventId, CONFIRMED));
         }
 
@@ -388,7 +386,7 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    private Event checkAndReturnEvent(Long eventId) {
+    private Event checkEventExistence(Long eventId) {
         return eventRepository.findById(eventId).orElseThrow(() ->
                 new NotFoundException("Событие с id " + eventId + " не найдено"));
     }
