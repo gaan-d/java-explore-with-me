@@ -37,7 +37,10 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static ewm.events.enums.AdminAction.PUBLISH_EVENT;
@@ -136,7 +139,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDto updateEventByAdmin(Long eventId, EventAdminUpdateDto dto) {
-        Event event =checkEventExistence(eventId);
+        Event event = checkEventExistence(eventId);
 
         if (dto.getStateAction() != null) {
             AdminAction stateAction = AdminAction.valueOf(dto.getStateAction());
