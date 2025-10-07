@@ -72,4 +72,16 @@ public class ErrorHandler {
                 .timestamp(LocalDateTime.now())
                 .build();
     }
+
+    @ExceptionHandler(Throwable.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleUncaughtException(final Throwable e) {
+        log.error("Непредвиденная ошибка: {}", e.getMessage(), e);
+        return ErrorResponse.builder()
+                .message("Непредвиденная ошибка")
+                .reason("Ошибка сервера")
+                .status("INTERNAL_SERVER_ERROR")
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
 }

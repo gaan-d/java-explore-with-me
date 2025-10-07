@@ -62,7 +62,7 @@ public class EventServiceImpl implements EventService {
     private final LocationService locationService;
     private final RequestRepository requestRepository;
     private final StatsClient statsClient;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     @Value("${app}")
     private String app;
