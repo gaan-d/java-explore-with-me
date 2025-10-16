@@ -30,6 +30,9 @@ public class StatsClient {
     }
 
     public ResponseEntity<Object> save(HitDto hitDto) {
+        log.debug("Отправка hit: uri={}, ip={}, timestamp={}",
+                hitDto.getUri(), hitDto.getIp(), hitDto.getTimestamp());
+
         ResponseEntity<Object> response;
         try {
             response = rest.postForEntity(serverUrl + "/hit", hitDto, Object.class);
@@ -47,10 +50,15 @@ public class StatsClient {
     }
 
     public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+        log.debug("Запрос статистики: uris={}, start={}, end={}, unique={}", uris, start, end, unique);
         StringBuilder url = new StringBuilder(serverUrl + "/stats?");
-        for (String uri : uris) {
-            url.append("&uris=").append(uri);
+        if (!uris.isEmpty()) {
+            url.append("uris=").append(uris.getFirst());
+            for (int i = 1; i < uris.size(); i++) {
+                url.append("&uris=").append(uris.get(i));
+            }
         }
+
         url.append("&unique=").append(unique);
         url.append("&start=").append(start);
         url.append("&end=").append(end);

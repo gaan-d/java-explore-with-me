@@ -8,6 +8,7 @@ import ewm.stats.EndpointHitMapper;
 import ewm.stats.EndpointHitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -39,8 +40,10 @@ public class EndpointHitServiceImpl implements EndpointHitService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void hit(HitDto hitDto) {
         EndpointHit endpointHit = mapper.mapDtoToModel(hitDto);
         repository.save(endpointHit);
+        repository.flush();
     }
 }
